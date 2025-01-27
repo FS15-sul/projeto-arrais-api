@@ -1,0 +1,1709 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ACESAQUIS {
+  CD_ACESAQUIS Int        @id @default(0)
+  CD_AQUISICAO Int?       @default(0)
+  CD_ACESSORIO Int?       @default(0) @db.SmallInt
+  ACESSORIO    ACESSORIO? @relation(fields: [CD_ACESSORIO], references: [CD_ACESSORIO], onDelete: NoAction, onUpdate: NoAction, map: "ACESSORIOACESAQUIS")
+  AQUISICAO    AQUISICAO? @relation(fields: [CD_AQUISICAO], references: [CD_AQUISICAO], onDelete: Cascade, map: "AQUISICAOACESAQUIS")
+
+  @@index([CD_ACESSORIO], map: "ACESSORIOACESAQUIS")
+  @@index([CD_AQUISICAO], map: "AQUISICAOACESAQUIS")
+}
+
+model ACESSO {
+  CD_ACESSO  Int       @id @default(autoincrement())
+  DT_ACESSO  DateTime? @db.DateTime(0)
+  CD_USUARIO Int?
+  NM_USUARIO String?   @db.VarChar(50)
+  TP_ACESSO  Int?      @default(0) @db.SmallInt
+
+  @@index([CD_USUARIO], map: "ik_acesso_CDUSUARIO")
+}
+
+model ACESSORIO {
+  CD_ACESSORIO Int         @id @default(0) @db.SmallInt
+  NM_ACESSORIO String      @db.VarChar(30)
+  ACESAQUIS    ACESAQUIS[]
+}
+
+model AGENCIA {
+  CD_AGENCIA     Int     @id @default(0) @db.SmallInt
+  NM_AGENCIA     String  @db.VarChar(70)
+  NM_ENDERECO    String? @db.VarChar(50)
+  NR_CEP         String? @db.VarChar(10)
+  NM_COMPLEMENTO String? @db.VarChar(30)
+}
+
+model AGENCONT {
+  CD_AGENCIACONT Int     @default(0) @db.SmallInt
+  CD_AGENCIA     Int     @default(0) @db.SmallInt
+  NM_CONTATO     String? @db.VarChar(50)
+  NM_CARGO       String? @db.VarChar(30)
+  NR_FONE        String? @db.VarChar(15)
+
+  @@id([CD_AGENCIACONT, CD_AGENCIA])
+}
+
+model AQUISICAO {
+  CD_AQUISICAO        Int          @id @default(0)
+  NR_PLACA            String       @db.VarChar(7)
+  TP_SITUACAO         Int?         @default(0) @db.SmallInt
+  CD_CLIENTE          Int?         @default(0)
+  NM_COR              String       @db.VarChar(30)
+  NM_ANO              String?      @db.VarChar(9)
+  NM_CHASSI           String?      @db.VarChar(50)
+  NM_RENAVAM          String?      @db.VarChar(20)
+  CD_AQUISVENDA       Int?         @default(0)
+  CD_MODELO           Int?         @default(0) @db.SmallInt
+  CD_ESTADO           Int?         @default(0) @db.SmallInt
+  CD_CIDADE           Int?         @default(0) @db.SmallInt
+  TP_COMBUSTIVEL      Int?         @default(0)
+  NM_OBSERVACAO       String?      @db.LongText
+  TP_IPVATOTAL        Int?         @default(0) @db.SmallInt
+  VL_IPVATOTAL        Float?       @default(0)
+  TP_IPVAATRASO       Int?         @default(0) @db.SmallInt
+  NM_IPVAATRASO       String?      @db.VarChar(2)
+  TP_IPVA1            Int?         @default(0) @db.SmallInt
+  TP_IPVA2            Int?         @default(0) @db.SmallInt
+  TP_IPVA3            Int?         @default(0) @db.SmallInt
+  VL_IPVAPARC         Float?       @default(0)
+  ST_DUAL             Int?         @default(0) @db.SmallInt
+  NM_KILOMETRO        String?      @db.VarChar(10)
+  ST_DUT              Int?         @default(0) @db.SmallInt
+  ST_MULTA            Int?         @default(0) @db.SmallInt
+  ST_IL               Int?         @default(0) @db.SmallInt
+  ST_IPVA             Int?         @default(0) @db.SmallInt
+  ST_LICENCA          Int?         @default(0) @db.SmallInt
+  ST_SEGURO           Int?         @default(0) @db.SmallInt
+  DT_AQUISICAO        DateTime?    @db.Date
+  VL_VEICULO          Float?       @default(0)
+  DT_PAGAMENTO        DateTime?    @db.Date
+  VL_PEDIDO           Float?       @default(0)
+  CD_CORRETOR         Int?         @default(0) @db.SmallInt
+  VL_COMISSAO         Float?       @default(0)
+  CD_AGENCIA          Int?         @default(0) @db.SmallInt
+  TP_ALIENADO         Int?         @default(0) @db.SmallInt
+  CD_FINANCEIRA       Int?         @default(0) @db.SmallInt
+  QT_PRESTACAO        Int?         @default(0) @db.SmallInt
+  VL_PRESTACAO        Float?       @default(0)
+  QT_PAGAS            Int?         @default(0) @db.SmallInt
+  CD_TRANSACAO        Int?         @default(0) @db.SmallInt
+  DT_VENDA            DateTime?    @db.Date
+  VL_RECEBIDO         Float?       @default(0)
+  CD_TRANSACVENDA     Int?         @default(0) @db.SmallInt
+  CD_FINANVENDA       Int?         @default(0) @db.SmallInt
+  QT_PRESTACAOVENDA   Int?         @default(0) @db.SmallInt
+  VL_PRESTACAOVENDA   Float?       @default(0)
+  TP_FINANVENDA       Int?         @default(0) @db.SmallInt
+  CD_CORRETORVENDA    Int?         @default(0) @db.SmallInt
+  VL_COMISSAOVENDA    Float?       @default(0)
+  CD_LOJACORRETOR     Int?         @default(0) @db.SmallInt
+  CD_COMPRADOR        Int?         @default(0)
+  NM_OBSVENDA         String?      @db.VarChar(255)
+  DT_BAIXA            DateTime?    @db.Date
+  NM_MOTIVO           String?      @db.VarChar(100)
+  TP_APOIO            Int?         @default(0) @db.SmallInt
+  TP_TRANSFERENCIA    Int?         @default(0) @db.SmallInt
+  DT_TRANSFERENCIA    DateTime?    @db.Date
+  TP_TABELA           Int?         @default(1) @db.SmallInt
+  TP_FISCAL           Int?         @default(0) @db.SmallInt
+  DT_ENTRADANF        DateTime?    @db.Date
+  DT_SAIDANF          DateTime?    @db.Date
+  VL_ENTRADANF        Float?       @default(0)
+  VL_SAIDANF          Float?       @default(0)
+  TP_NOTA             Int?         @default(0) @db.SmallInt
+  CD_LOCAL            Int?         @default(0) @db.SmallInt
+  NM_USUBAIXA         String?      @db.VarChar(50)
+  DT_TRANSFLOJA       DateTime?    @db.Date
+  VL_TROCO            Float?       @default(0)
+  VL_TAC              Float?       @default(0)
+  VL_PGTRANSFERENCIA  Float?       @default(0)
+  VL_QUITACAO         Float?       @default(0)
+  TP_TAC              Int?         @default(0) @db.SmallInt
+  TP_PGTRANSFERENCIA  Int?         @default(0) @db.SmallInt
+  DT_VENCIMENTO       DateTime?    @db.Date
+  DT_PAGCOMISSAO      DateTime?    @db.Date
+  TP_PGCOMAQUISICAO   Int?         @default(0) @db.SmallInt
+  DT_PGCOMAQUISICAO   DateTime?    @db.Date
+  TP_PGCOMVENDA       Int?         @default(0) @db.SmallInt
+  DT_PGCOMVENDA       DateTime?    @db.Date
+  TP_DOCTRANSFER      Int?         @default(0) @db.SmallInt
+  CD_RESPDOCTRANSF    Int?         @default(0)
+  NR_PLACAOLD         String?      @db.VarChar(7)
+  CD_LOJAVENDA        Int?         @default(0) @db.UnsignedTinyInt
+  DT_ENTREGATRANSF    DateTime?    @db.Date
+  VL_LOJA             Float?       @default(0)
+  VL_CONSIGNADO       Float?       @default(0)
+  TP_PGCECAF          Int?         @default(0) @db.SmallInt
+  CD_TRANSACANT       Int?         @default(0) @db.SmallInt
+  VL_VLQUITACAO       Float?       @default(0)
+  TP_RETGATILHO       Int?         @default(0) @db.SmallInt
+  DT_RETGATILHO       DateTime?    @db.Date
+  DT_TITULARIDADE     DateTime?    @db.Date
+  VL_PAGCOMISSAO      Float?       @default(0)
+  TP_PAGAUTORIZADA    Int?         @default(0) @db.SmallInt
+  DT_PAGAUTORIZADA    DateTime?    @db.Date
+  DT_PAGGATILHO       String?      @db.VarChar(255)
+  VL_PAGGATILHO       Float?       @default(0)
+  CD_FORNECEDOR       Int?         @default(0) @db.SmallInt
+  NR_NFENTRADA        String?      @db.VarChar(15)
+  NR_NFSAIDA          String?      @db.VarChar(15)
+  NR_BLENTRADA        String?      @db.VarChar(70)
+  NR_BLSAIDA          String?      @db.VarChar(70)
+  VL_PGCECAF          Float?       @default(0)
+  NM_KILOMETROVND     String?      @db.VarChar(10)
+  CD_CORRENTISTA1     Int?         @db.SmallInt
+  CD_CORRENTISTA2     Int?         @db.SmallInt
+  NM_OBSAQUISICAO     String?      @db.VarChar(255)
+  NM_RESPDOCTRANSF    String?      @db.VarChar(100)
+  DT_DUTELETRONICO    DateTime?    @db.Date
+  DT_ENTDUTELETRONICO DateTime?    @db.Date
+  NM_OBSTRANSFERENCIA String?      @default("'") @db.VarChar(255)
+  TP_WEB              Int          @default(0) @db.SmallInt
+  TP_KFMETADE         Int?         @default(2) @db.SmallInt
+  VL_COMISSAOAPOIO    Float?       @default(0)
+  CD_CONTASFINANCOM   Int?         @db.SmallInt
+  CD_CONTASFINANQUIT  Int?         @db.SmallInt
+  CD_CONTASFINANVENDA Int?         @db.SmallInt
+  CD_FOLHAPAGTO       Int?
+  TP_TROCOCONTA       Int?         @db.SmallInt
+  CD_CONTASFINANTROCO Int?         @db.SmallInt
+  NM_AQUISICAOORD     String?      @db.VarChar(100)
+  VL_NEGOCIADO        Float?       @default(0)
+  TP_SITUACAOOLD      Int?         @default(0) @db.SmallInt
+  NM_CONSIGNATARIO    String?      @db.VarChar(50)
+  NR_CONSIGCPFCNPJ    String?      @db.VarChar(20)
+  NR_FONECONSIG       String?      @db.VarChar(15)
+  TP_PEDIDO           Int?         @default(0) @db.SmallInt
+  HR_VENDA            String?      @db.VarChar(5)
+  TP_REPASSE          Int?         @default(0) @db.SmallInt
+  FL_PAGOCOMISSAO     Int?         @default(0) @db.SmallInt
+  CD_LOCALENT         Int?
+  TP_VENDA            Int?         @default(0) @db.SmallInt
+  TP_HIGCONSIGNATARIO Int?         @db.SmallInt
+  VL_HIGCONSIGNATARIO Float?
+  NR_KMENTRADA        String?      @db.VarChar(8)
+  DT_ENTRADA          DateTime?    @db.Date
+  HR_ENTRADA          String?      @db.VarChar(5)
+  NR_KMSAIDA          String?      @db.VarChar(8)
+  DT_SAIDA            DateTime?    @db.Date
+  HR_SAIDA            String?      @db.VarChar(5)
+  CD_TRANSACAOOLD     Int?         @default(0) @db.SmallInt
+  CD_CORRETORVENDA2   Int?         @default(0) @db.SmallInt
+  VL_COMISSAOVENDA2   Float?       @default(0)
+  TP_CONFERIDO        Int?         @default(0) @db.SmallInt
+  DT_CONFERIDO        DateTime?    @db.Date
+  NM_CONFERIDO        String?      @db.VarChar(50)
+  NR_CARROZERO        String?      @db.VarChar(8)
+  NR_HORAVENDA        String?      @db.VarChar(5)
+  DT_ENTREGAVEIC      DateTime?    @db.Date
+  NR_HORACOMPRA       String?      @db.VarChar(5)
+  VL_COMISSAOLJ       Float?       @default(0)
+  TP_IPVA4            Int?         @default(0) @db.SmallInt
+  TP_IPVA5            Int?         @default(0) @db.SmallInt
+  VL_PREMIO           Float?
+  NR_SEGURANCA        String?      @db.VarChar(12)
+  CD_SEGURANCA        String?      @db.VarChar(12)
+  TP_ZERALUCRO        Int?         @default(0) @db.SmallInt
+  TP_CALCJUROS        Int?         @default(0) @db.SmallInt
+  TP_BLINDADO         Int?         @default(0) @db.SmallInt
+  ACESAQUIS           ACESAQUIS[]
+  CIDADE              CIDADE?      @relation(fields: [CD_CIDADE], references: [CD_CIDADE], onDelete: NoAction, onUpdate: NoAction, map: "CIDADEAQUISICAO")
+  CLIENTE             CLIENTE?     @relation(fields: [CD_CLIENTE], references: [CD_CLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "CLIENTEAQUISICAO")
+  ESTADO              ESTADO?      @relation(fields: [CD_ESTADO], references: [CD_ESTADO], onDelete: NoAction, onUpdate: NoAction, map: "ESTADOAQUISICAO")
+  OCORRENCIA          OCORRENCIA[]
+  PAGAMENTO           PAGAMENTO[]
+
+  @@index([CD_CORRETOR, CD_CORRETORVENDA], map: "CD_CORRETOR")
+  @@index([CD_MODELO], map: "CD_MODELO")
+  @@index([CD_TRANSACAO, CD_TRANSACVENDA], map: "CD_TRANSACAO")
+  @@index([CD_CIDADE], map: "CIDADEAQUISICAO")
+  @@index([CD_CLIENTE, CD_COMPRADOR], map: "CLIENTEAQUISICAO")
+  @@index([DT_AQUISICAO], map: "DT_AQUISICAO")
+  @@index([DT_VENDA], map: "DT_VENDA")
+  @@index([CD_ESTADO], map: "ESTADOAQUISICAO")
+  @@index([NR_PLACA], map: "Index_nr_placa")
+  @@index([TP_COMBUSTIVEL], map: "TP_COMBUSTIVEL")
+  @@index([TP_SITUACAO], map: "TP_SITUACAO")
+}
+
+model ATUALIZA {
+  DT_ATUALIZA DateTime @id @db.DateTime(0)
+  NM_USUABRIR String?  @db.VarChar(50)
+  TP_MENSAGEM Int?     @default(0) @db.UnsignedTinyInt
+}
+
+model BAIRRO {
+  CD_BAIRRO Int     @id @default(0) @db.SmallInt
+  NM_BAIRRO String? @db.VarChar(30)
+  CD_CIDADE Int     @default(0) @db.SmallInt
+  CD_ESTADO Int?    @default(0) @db.SmallInt
+}
+
+model BANCO {
+  CD_BANCO   Int     @id @default(0)
+  NM_BANCO   String  @db.VarChar(70)
+  NR_CONTA   String? @db.VarChar(10)
+  NR_AGENCIA String? @db.VarChar(10)
+  NR_FONE1   String? @db.VarChar(20)
+  NR_FONE2   String? @db.VarChar(20)
+  NM_CONTATO String? @db.VarChar(50)
+}
+
+model CENTCUSTO {
+  CD_CENTCUSTO Int    @id @default(0) @db.SmallInt
+  NM_CENTCUSTO String @db.VarChar(50)
+  TP_CENTCUSTO Int?   @default(0) @db.SmallInt
+  TP_DESPESA   Int?   @default(0) @db.SmallInt
+  TP_ATIVO     Int?   @default(0) @db.SmallInt
+  TP_CATEGORIA Int?   @default(0) @db.SmallInt
+  TP_RELATORIO Int?   @default(0) @db.SmallInt
+}
+
+model CEPLISTA {
+  CD_CEPLISTA Int     @id @default(autoincrement())
+  NR_CEP      String? @db.VarChar(8)
+  NM_ENDERECO String? @db.VarChar(255)
+  CD_ESTADO   Int?
+  CD_CIDADE   Int?
+  CD_BAIRRO   Int?
+  NM_BAIRRO   String? @db.VarChar(80)
+}
+
+model CHEQUESRECEBIDOS {
+  CD_CHEQUESRECEBIDOS Int       @default(0)
+  NR_CHEQUE           String    @db.VarChar(10)
+  NM_BANCO            String    @db.VarChar(20)
+  DT_VENCIMENTO       DateTime  @db.Date
+  VL_CHEQUE           Float?    @default(0)
+  FL_STATUS           Int?      @default(0) @db.UnsignedTinyInt
+  CD_CLIENTE          Int?      @default(0) @db.SmallInt
+  FL_SITUACAO         Int?      @default(0) @db.SmallInt
+  NR_NATCHECK         String?   @db.VarChar(150)
+  NR_AGENCIA          String?   @db.VarChar(10)
+  DT_VENDA            DateTime? @db.Date
+  NM_CLIENTE          String?   @db.VarChar(70)
+  TP_CLIENTE          Int?      @default(0) @db.SmallInt
+  CD_DESTINO          Int?      @default(0) @db.SmallInt
+  NR_CPFCGC           String?   @db.VarChar(20)
+  NR_FONE             String?   @db.VarChar(18)
+  NR_IDENTIDADE       String?   @db.VarChar(15)
+  NM_ENDERECO         String?   @db.VarChar(70)
+  NM_VEICULO          String?   @db.VarChar(30)
+  NR_PLACA            String?   @db.VarChar(7)
+  NM_USUARIO          String?   @db.VarChar(50)
+  DT_CANCELA          DateTime? @db.Date
+  CD_AQUISICAO        Int?      @default(0)
+  TP_FINANCEIRO       Int?      @default(0) @db.SmallInt
+  VL_CHEQUEFIM        Float?    @default(0)
+  VL_PERCENTUAL       Float?    @default(0)
+  NM_DESCRICAO        String?   @db.VarChar(150)
+  NM_TITULAR          String?   @db.VarChar(150)
+  CD_CONTASFINAN      Int?      @db.SmallInt
+  CD_FACTORING        Int?
+  VL_JUROS            Float?    @default(0)
+  DT_BAIXA            DateTime? @db.Date
+  DT_BAIXAPERDA       DateTime? @db.Date
+  TP_MOVIMENTO        Int?      @db.SmallInt
+
+  @@id([CD_CHEQUESRECEBIDOS, NR_CHEQUE])
+  @@index([CD_AQUISICAO], map: "Index_aquisicao")
+  @@index([CD_CLIENTE], map: "Index_cliente")
+  @@index([FL_STATUS], map: "Index_status")
+}
+
+model CIDADE {
+  CD_CIDADE Int         @id @default(0) @db.SmallInt
+  NM_CIDADE String      @db.VarChar(30)
+  CD_ESTADO Int         @default(0) @db.SmallInt
+  AQUISICAO AQUISICAO[]
+}
+
+model CLIENTE {
+  CD_CLIENTE       Int         @id @default(0)
+  NM_CLIENTE       String      @db.VarChar(100)
+  NM_USUAL         String?     @db.VarChar(25)
+  DT_CLIENTE_NASC  DateTime?   @db.DateTime(0)
+  NR_CLIENTE_IDADE String?     @db.VarChar(3)
+  TP_CLIENTE_TIPO  Boolean?    @db.Bit(1)
+  NR_CGC           String?     @db.VarChar(20)
+  NR_CPF           String?     @db.VarChar(15)
+  NR_RG            String?     @db.VarChar(25)
+  NM_ENDERECO      String?     @db.VarChar(50)
+  NR_CEP           String?     @db.VarChar(10)
+  NM_COMPLEMENTO   String?     @db.VarChar(30)
+  NR_FONE1         String?     @db.VarChar(15)
+  NR_FONE2         String?     @db.VarChar(15)
+  NR_CELULAR       String?     @db.VarChar(15)
+  NM_EMAIL         String?     @db.VarChar(60)
+  CD_ESTADO        Int?        @default(0) @db.SmallInt
+  CD_CIDADE        Int?        @default(0) @db.SmallInt
+  CD_BAIRRO        Int?        @default(0) @db.SmallInt
+  NM_RAZAO         String?     @db.VarChar(70)
+  NM_ENDTRAB       String?     @db.VarChar(70)
+  NM_COMPTRAB      String?     @db.VarChar(40)
+  NR_CEPTRAB       String?     @db.VarChar(10)
+  NR_CGCTRAB       String?     @db.VarChar(20)
+  NR_FONE1TRAB     String?     @db.VarChar(15)
+  NR_FONE2TRAB     String?     @db.VarChar(15)
+  NR_FONE3TRAB     String?     @db.VarChar(15)
+  NR_RAMAL         String?     @db.VarChar(6)
+  NM_RECADO        String?     @db.VarChar(50)
+  CD_ESTADOTRAB    Int?        @default(0) @db.SmallInt
+  CD_CIDADETRAB    Int?        @default(0) @db.SmallInt
+  CD_BAIRROTRAB    Int?        @default(0) @db.SmallInt
+  NR_ENDERECO      String?     @db.VarChar(6)
+  FL_STATUS        Int?        @default(0) @db.SmallInt
+  DT_ALTERACAO     DateTime?   @db.Date
+  NM_MOTIVOALT     String?     @db.VarChar(100)
+  AQUISICAO        AQUISICAO[]
+
+  @@index([CD_BAIRRO, CD_BAIRROTRAB], map: "Index_cd_bairro")
+  @@index([CD_CIDADE, CD_CIDADETRAB], map: "Index_cd_cidade")
+  @@index([CD_ESTADO, CD_ESTADOTRAB], map: "Index_cd_estado")
+  @@index([TP_CLIENTE_TIPO], map: "Index_tp_tipo")
+}
+
+model CNTTRANSFERENCIA {
+  CD_CNTTRANSFERENCIA    Int       @id @default(0) @db.SmallInt
+  CD_CONTAS              Int       @default(0)
+  NM_OBSCNTTRANSFERENCIA String?   @db.VarChar(200)
+  DT_VENCIMENTO          DateTime? @db.Date
+  DT_PAGAMENTO           DateTime? @db.Date
+  VL_TOTAL               Float?    @default(0)
+  VL_PAGO                Float?    @default(0)
+  VL_JUROS               Float?    @default(0)
+  NM_REFERENTE           String?   @db.VarChar(7)
+  TP_STATUS              Int?      @default(0) @db.UnsignedTinyInt
+  NM_USUCADASTRO         String?   @db.VarChar(50)
+  NM_USUCANCELA          String?   @db.VarChar(50)
+  CD_CORRENTISTA         Int?      @db.SmallInt
+  CD_FLUXOCX             Int?
+  DT_CANCELA             DateTime? @db.Date
+  CD_AQUISICAO           Int?      @default(0)
+}
+
+model COMISSAOAPO {
+  CD_AQUISICAO   Int    @default(0)
+  CD_FUNCIONARIO Int    @default(0) @db.SmallInt
+  TP_APOIO       Int    @default(0) @db.SmallInt
+  VL_COMISSAO    Float? @default(0)
+
+  @@id([CD_AQUISICAO, CD_FUNCIONARIO, TP_APOIO])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model CONFIG {
+  NR_COLMATRICIAL    Int?      @default(0) @db.SmallInt
+  NR_COLJATO         Int?      @default(0) @db.SmallInt
+  NR_LINMATRICIAL    Int?      @default(0) @db.SmallInt
+  NR_LINJATO         Int?      @default(0) @db.SmallInt
+  DT_TESTAR          DateTime? @db.Date
+  NM_RESULTADO       String?   @db.VarChar(3)
+  NR_QTDE1           Int?      @default(0) @db.SmallInt
+  NR_QTDE2           Int?      @default(0) @db.SmallInt
+  VL_COMISSAO1       Float?    @default(0)
+  NR_QTDE3           Int?      @default(0) @db.SmallInt
+  NR_QTDE4           Int?      @default(0) @db.SmallInt
+  VL_COMISSAO2       Float?    @default(0)
+  NR_QTDE5           Int?      @default(0) @db.SmallInt
+  NR_QTDE6           Int?      @default(0) @db.SmallInt
+  VL_COMISSAO3       Float?    @default(0)
+  NR_QTDE7           Int?      @default(0) @db.SmallInt
+  NR_QTDE8           Int?      @default(0) @db.SmallInt
+  VL_COMISSAO4       Float?    @default(0)
+  NR_QTDE9           Int?      @default(0) @db.SmallInt
+  NR_QTDE10          Int?      @default(0) @db.SmallInt
+  VL_COMISSAO5       Float?    @default(0)
+  NR_QTDE11          Int?      @default(0) @db.SmallInt
+  NR_QTDE12          Int?      @default(0) @db.SmallInt
+  VL_COMISSAO6       Float?    @default(0)
+  TP_IMPRESSORA      Int?      @default(0) @db.SmallInt
+  VL_CARRO1          Float?    @default(0)
+  VL_CARRO2          Float?    @default(0)
+  VL_COMAP1          Float?    @default(0)
+  VL_CARRO3          Float?    @default(0)
+  VL_CARRO4          Float?    @default(0)
+  VL_COMAP2          Float?    @default(0)
+  VL_CARRO5          Float?    @default(0)
+  VL_CARRO6          Float?    @default(0)
+  VL_COMAP3          Float?    @default(0)
+  VL_CARRO7          Float?    @default(0)
+  VL_CARRO8          Float?    @default(0)
+  VL_CARRO9          Float?
+  VL_CARRO10         Float?
+  VL_CARRO11         Float?
+  VL_CARRO12         Float?
+  VL_COMAP4          Float?    @default(0)
+  DT_EXECUTAR        DateTime? @db.Date
+  TP_COMCARRO1       Int?      @default(0) @db.SmallInt
+  TP_COMCARRO2       Int?      @default(0) @db.SmallInt
+  TP_APOCARRO1       Int?      @default(0) @db.SmallInt
+  TP_APOCARRO2       Int?      @default(0) @db.SmallInt
+  TP_PGCOMISSAO      Int?      @default(0) @db.SmallInt
+  TP_TOTALIZACAO     Int?      @default(0) @db.SmallInt
+  VL_CUSTOPERACIONAL Float?    @default(0)
+  VL_CUSTFUNCIONARIO Float?    @default(0)
+  CD_USUARIO         Int?      @default(0) @db.SmallInt
+  TP_COMISSAOVEND    Int?      @default(0) @db.UnsignedTinyInt
+  VL_COMAP5          Float?
+  VL_COMAP6          Float?
+  TP_AVISOTRANSF     Int?      @default(0) @db.SmallInt
+  TP_AVISOANIVERS    Int?      @default(0) @db.SmallInt
+  TP_AVISOCNT        Int?      @default(0) @db.SmallInt
+  CD_USUSINC         Int?
+  TP_AVISOSINC       Int       @default(0) @db.SmallInt
+  VL_CARROZERO1      Float
+  VL_CARROZERO2      Float?
+  VL_CARROZERO3      Float?
+  VL_CARROZERO4      Float?
+  VL_CARROZERO5      Float?
+  VL_CARROZERO6      Float?
+  VL_CARROZERO7      Float?
+  VL_CARROZERO8      Float?
+  VL_CARROZERO9      Float?
+  VL_CARROZERO10     Float?
+  VL_CARROZERO11     Float?
+  VL_CARROZERO12     Float?
+  VL_COMISSZERO1     Float?
+  VL_COMISSZERO2     Float?
+  VL_COMISSZERO3     Float?
+  VL_COMISSZERO4     Float?
+  VL_COMISSZERO5     Float?
+  VL_COMISSZERO6     Float?
+  TP_CONSIGNADO      Int?
+  VL_COMISSCONSIG    Float?
+  TP_COMCARRO3       Int?      @default(0) @db.SmallInt
+  NR_CARROZERO       String?   @db.VarChar(8)
+  QT_DIAS1           Float?
+  VL_PERCENTUAL1     Float?
+  QT_DIAS2           Float?
+  VL_PERCENTUAL2     Float?
+  QT_DIAS3           Float?
+  VL_PERCENTUAL3     Float?
+  VL_CARROUSA1       Float?    @default(0)
+  VL_CARROUSA2       Float?    @default(0)
+  VL_COMISUSA1       Float?    @default(0)
+  VL_CARROUSA3       Float?    @default(0)
+  VL_CARROUSA4       Float?    @default(0)
+  VL_COMISUSA2       Float?    @default(0)
+  VL_CARROUSA5       Float?    @default(0)
+  VL_CARROUSA6       Float?    @default(0)
+  VL_COMISUSA3       Float?    @default(0)
+  VL_CARROUSA7       Float?    @default(0)
+  VL_CARROUSA8       Float?    @default(0)
+  VL_COMISUSA4       Float?    @default(0)
+  VL_CARROUSA9       Float?    @default(0)
+  VL_CARROUSA10      Float?    @default(0)
+  VL_COMISUSA5       Float?    @default(0)
+  VL_CARROUSA11      Float?    @default(0)
+  VL_CARROUSA12      Float?    @default(0)
+  VL_COMISUSA6       Float?    @default(0)
+  TP_RESUMOPGTO      Int?      @default(0) @db.SmallInt
+  TP_COMCARROZR      Int?      @db.SmallInt
+  CD_CONTAFINANEMP   Int?      @default(0)
+  TP_OBRIGRESPTRANS  Int?      @default(0) @db.SmallInt
+  TP_OBRIGVLPEDIDO   Int?      @default(0) @db.SmallInt
+  TP_OBRIGDADOS      Int?      @default(0) @db.SmallInt
+  NM_SITESINCRONIZA  String?   @db.VarChar(200)
+  VL_PGTRANSFSEM     Float?    @default(0)
+  VL_PGTRANSFCOM     Float?    @default(0)
+  VL_PGCECAF         Float?    @default(0)
+  VL_PLMERC          Float?    @default(0)
+  VL_VISTCAUTELAR    Float?    @default(0)
+  VL_VLCRPF          Float?    @default(0)
+  VL_VLCRPJ          Float?    @default(0)
+  TP_COR             Int?      @db.SmallInt
+  VL_BONUS           Float?    @default(0)
+  QT_BONUS           Int?      @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model CONFIGCORR {
+  CD_CONFIGCORR  Int    @default(autoincrement())
+  CD_CORRETOR    Int?   @default(0)
+  NR_QTDE1       Float? @default(0)
+  NR_QTDE2       Float? @default(0)
+  VL_COMISSAO1   Float? @default(0)
+  NR_QTDE3       Float? @default(0)
+  NR_QTDE4       Float? @default(0)
+  VL_COMISSAO2   Float? @default(0)
+  NR_QTDE5       Float? @default(0)
+  NR_QTDE6       Float? @default(0)
+  VL_COMISSAO3   Float? @default(0)
+  NR_QTDE7       Float? @default(0)
+  NR_QTDE8       Float? @default(0)
+  VL_COMISSAO4   Float? @default(0)
+  NR_QTDE9       Float? @default(0)
+  NR_QTDE10      Float? @default(0)
+  VL_COMISSAO5   Float? @default(0)
+  NR_QTDE11      Float? @default(0)
+  NR_QTDE12      Float? @default(0)
+  VL_COMISSAO6   Float? @default(0)
+  QT_QTDE1       Float? @default(0)
+  QT_QTDE2       Float? @default(0)
+  VL_COMISSAOQT1 Float? @default(0)
+  QT_QTDE3       Float? @default(0)
+  QT_QTDE4       Float? @default(0)
+  VL_COMISSAOQT2 Float? @default(0)
+  QT_QTDE5       Float? @default(0)
+  QT_QTDE6       Float? @default(0)
+  VL_COMISSAOQT3 Float? @default(0)
+  QT_QTDE7       Float? @default(0)
+  QT_QTDE8       Float? @default(0)
+  VL_COMISSAOQT4 Float? @default(0)
+  QT_QTDE9       Float? @default(0)
+  QT_QTDE10      Float? @default(0)
+  VL_COMISSAOQT5 Float? @default(0)
+  QT_QTDE11      Float? @default(0)
+  QT_QTDE12      Float? @default(0)
+  VL_COMISSAOQT6 Float? @default(0)
+  VL_FIXO        Float? @default(0)
+  VL_FEIRAO      Float? @default(0)
+
+  @@index([CD_CONFIGCORR], map: "Auto_Increment_Key")
+  @@ignore
+}
+
+model CONFVEICULO {
+  CD_CONFVEICULO Int       @id @default(autoincrement())
+  CD_AQUISICAO   Int?      @default(0) @db.SmallInt
+  TP_CONFTRANSF  Int?      @default(0) @db.SmallInt
+  DT_CONFTRANSF  DateTime? @db.Date
+  NM_CONFTRANSF  String?   @db.VarChar(50)
+  VL_CONFTRANSF  Float?    @default(0)
+  VL_CONFCECAF   Float?    @default(0)
+}
+
+model CONSORCIO {
+  CD_CONSORCIO Int     @id @default(0) @db.SmallInt
+  NM_CONSORCIO String? @db.VarChar(100)
+}
+
+model CONTAS {
+  CD_CONTAS Int    @id @default(0)
+  NM_CONTAS String @db.VarChar(200)
+  TP_CONTAS Int?   @default(0) @db.UnsignedTinyInt
+  TP_ATIVO  Int?   @default(0) @db.UnsignedTinyInt
+  TP_TIPO   Int?   @default(0) @db.UnsignedTinyInt
+}
+
+model CONTASFINAN {
+  CD_CONTASFINAN Int    @id @default(0)
+  NM_CONTASFINAN String @db.VarChar(200)
+  TP_CONTASFINAN Int?   @default(0) @db.UnsignedTinyInt
+  TP_ATIVO       Int?   @default(0) @db.UnsignedTinyInt
+  TP_TIPO        Int?   @default(0) @db.UnsignedTinyInt
+  CD_USUARIO     Int?   @db.SmallInt
+  CD_BANCO       Int?   @db.SmallInt
+
+  @@index([TP_ATIVO], map: "TP_ATIVO")
+  @@index([TP_CONTASFINAN], map: "TP_CONTASFINAN")
+  @@index([TP_TIPO], map: "TP_TIPO")
+}
+
+model CORRENTISTA {
+  CD_CORRENTISTA Int    @id @db.UnsignedSmallInt
+  NM_CORRENTISTA String @db.VarChar(60)
+}
+
+model CORRETOR {
+  CD_CORRETOR     Int     @id @default(0) @db.SmallInt
+  NM_CORRETOR     String  @db.VarChar(70)
+  NR_FONE1        String? @db.VarChar(15)
+  NR_FONE2        String? @db.VarChar(15)
+  NR_CELULAR      String? @db.VarChar(15)
+  NM_ENDERECO     String? @db.VarChar(100)
+  NR_CEP          String? @db.VarChar(10)
+  NM_COMPLEMENTO  String? @db.VarChar(30)
+  TP_COMISSAO     Int?    @default(0) @db.SmallInt
+  TP_TIPO         Int?    @default(0) @db.SmallInt
+  TP_ATIVO        Int?    @default(0) @db.SmallInt
+  TP_CALCULO      Int?    @default(0) @db.SmallInt
+  TP_PAGACOMISSAO Int?    @db.SmallInt
+  VL_FEIRAO       Float?  @default(0)
+  VL_FIXO         Float?  @default(0)
+  TP_STATUSVND    Int?    @default(0) @db.SmallInt
+}
+
+model DOCPENDENCIA {
+  CD_DOCPENDENCIA Int       @id @default(autoincrement())
+  CD_DOCUMENTACAO Int?      @default(0) @db.SmallInt
+  CD_AQUISICAO    Int?      @default(0) @db.SmallInt
+  TP_PENDENCIA    Int?      @default(0) @db.SmallInt
+  DT_PENDENCIA    DateTime? @db.Date
+  NM_PENDENCIA    String?   @db.VarChar(50)
+  NM_USUARIO      String?   @db.VarChar(50)
+}
+
+model DOCUMENTACAO {
+  CD_DOCUMENTACAO Int    @id @default(0) @db.SmallInt
+  NM_DOCUMENTACAO String @db.VarChar(30)
+  NM_SIGLA        String @db.VarChar(6)
+  TP_OBRIGA       Int?   @default(0) @db.SmallInt
+}
+
+model DOCUMENTO {
+  CD_DOCUMENTO    Int      @id @default(autoincrement())
+  NM_DOCUMENTO    String   @db.VarChar(255)
+  CD_DOCUMENTACAO Int?     @db.SmallInt
+  CD_AQUISICAO    Int
+  DT_DOCUMENTO    DateTime @db.Date
+  NM_DESCRICAO    String   @db.VarChar(50)
+  NM_USUARIO      String?  @db.VarChar(50)
+}
+
+model DOCVEICULO {
+  CD_DOCVEICULO   Int       @id @default(autoincrement())
+  CD_DOCUMENTACAO Int?      @default(0) @db.SmallInt
+  CD_AQUISICAO    Int?      @default(0) @db.SmallInt
+  TP_CONFERIDO    Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO    DateTime? @db.Date
+  NM_CONFERIDO    String?   @db.VarChar(50)
+}
+
+model DOCVEICULOAQ {
+  CD_DOCVEICULOAQ Int     @id
+  CD_AQUISICAO    Int
+  NM_RESP         String? @db.VarChar(255)
+  NM_OBSGERAL     String? @db.VarChar(255)
+  NM_OBSDOC       String? @db.VarChar(255)
+  NM_ANODOC       String? @db.VarChar(255)
+  NM_DEBITOS      String? @db.VarChar(255)
+  NM_OBSDEBITO    String? @db.VarChar(255)
+  NM_USUARIO      String? @db.VarChar(50)
+  TP_DUT          Int?    @db.SmallInt
+  TP_DOC          Int?    @db.SmallInt
+}
+
+model EMPRESA {
+  CD_EMPRESA Int     @id @default(0) @db.SmallInt
+  NM_EMPRESA String? @db.VarChar(100)
+}
+
+model ESTADO {
+  CD_ESTADO   Int         @id @default(0) @db.SmallInt
+  NM_ESTADO   String      @db.VarChar(30)
+  NM_SIGLA    String      @db.VarChar(2)
+  ICMS_COMPRA Float?      @default(0)
+  ICMS_VENDA  Float?      @default(0)
+  AQUISICAO   AQUISICAO[]
+}
+
+model FINANCEIRA {
+  CD_FINANCEIRA  Int     @id @default(0) @db.SmallInt
+  NM_FINANCEIRA  String  @db.VarChar(70)
+  TP_ATIVO       Int?    @default(0) @db.SmallInt
+  NM_ENDERECO    String? @db.VarChar(50)
+  NR_CEP         String? @db.VarChar(10)
+  NM_COMPLEMENTO String? @db.VarChar(30)
+  CD_CLIENTE     Int?
+  CD_FORNECEDOR  Int?    @db.SmallInt
+  VL_DESCLOJA    Float?  @default(0)
+  VL_DESCFUNC    Float?  @default(0)
+}
+
+model FINANCIAMENTO {
+  CD_FINANCIAMENTO   Int       @id @default(0)
+  DT_FINANCIAMENTO   DateTime? @db.Date
+  CD_AQUISICAO       Int?      @default(0)
+  CD_FINANCEIRA      Int?      @default(0) @db.SmallInt
+  QT_PRESTACAO       Int?      @default(0) @db.SmallInt
+  VL_PRESTACAO       Float?    @default(0)
+  TB_RETORNO         Float?    @default(0)
+  TP_FINANCIAMENTO   Int?      @default(0) @db.SmallInt
+  VL_FINANCIADO      Float?
+  CD_FUNCIONARIO     Int?      @default(0) @db.SmallInt
+  VL_COMISSAORET     Float?    @default(0)
+  CD_FORNECEDOR      Int?      @default(0)
+  VL_RETLOJA         Float?    @default(0)
+  VL_RETFUNC         Float?    @default(0)
+  VL_REFFINANCIADO   String?   @db.VarChar(50)
+  TP_SITUACAO        Int?      @default(0) @db.SmallInt
+  CD_FINANCEIRAPAGTO Int?      @default(0) @db.SmallInt
+  DT_PAGAMENTO       DateTime? @db.Date
+  VL_PAGO            Float?    @default(0)
+  TB_RETORNOPG       Float?    @default(0)
+  VL_BRUTO           Float?    @default(0)
+  VL_LIQUIDO         Float?    @default(0)
+  VL_DEVTAC          Float?    @default(0)
+  VL_OUTVAL          Float?    @default(0)
+  DT_CREDITO         DateTime? @db.Date
+  DT_RECEBIMENTO     DateTime? @db.Date
+  VL_CORRETOR        Float?    @default(0)
+  CD_CORRETORPAGTO   Int?      @default(0) @db.SmallInt
+  CD_BANCO           Int?      @db.SmallInt
+  CD_CENTCUSTO       Int?      @db.SmallInt
+  TP_MOVIMENTO       Int       @default(0) @db.SmallInt
+  CD_CONTASFINAN     Int?      @db.SmallInt
+
+  @@index([CD_AQUISICAO], map: "Index_cd_aquisicao")
+  @@index([CD_FINANCEIRA], map: "Index_cd_financeira")
+}
+
+model FINANCONT {
+  CD_FINANCONT  Int     @default(0) @db.SmallInt
+  CD_FINANCEIRA Int     @default(0) @db.SmallInt
+  NM_CONTATO    String  @db.VarChar(50)
+  NM_CARGO      String? @db.VarChar(30)
+  NR_FONE       String? @db.VarChar(15)
+
+  @@id([CD_FINANCONT, CD_FINANCEIRA])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FINANVEICULOFLUXOCX {
+  CD_FLUXOCX_FINAN Int
+  CD_FLUXOCX_CNT   Int
+  CD_AQUISICAO     Int
+  DT_VENCIMENTO    DateTime  @db.Date
+  CD_TPDOC         Int
+  VL_MOVIMENTO     Float
+  DT_CADASTRO      DateTime  @db.Date
+  CD_USUARIO       Int
+  CD_USUARIO_CANC  Int?
+  DT_CANCELA       DateTime? @db.Date
+  FL_STATUS        Int
+
+  @@index([CD_AQUISICAO], map: "IK_CD_AQUISICAO")
+  @@index([CD_FLUXOCX_FINAN, CD_FLUXOCX_CNT], map: "IK_CD_FLUXOCX")
+  @@index([CD_TPDOC], map: "IK_CD_TPDOC")
+  @@index([CD_USUARIO], map: "IK_CD_USUARIO")
+  @@index([DT_VENCIMENTO], map: "IK_DT_VENCIMENTO")
+  @@index([FL_STATUS], map: "IK_FL_STATUS")
+  @@ignore
+}
+
+model FLUXOCX {
+  CD_FLUXOCX     Float     @id @default(0)
+  CD_FORNECEDOR  Int?      @default(0) @db.SmallInt
+  CD_CLIENTE     Int?      @default(0)
+  CD_AQUISICAO   Int?      @default(0)
+  DT_EMISSAO     DateTime? @db.Date
+  DT_VENCIMENTO  DateTime? @db.Date
+  NM_DESCRICAO   String?   @db.VarChar(100)
+  CD_CENTCUSTO   Int?      @default(0) @db.SmallInt
+  CD_TPDOC       Int?      @default(0) @db.SmallInt
+  NR_DOC         String?   @db.VarChar(20)
+  VL_DOC         Float?    @default(0)
+  NM_OBS         String?   @db.VarChar(100)
+  VL_MOVIMENTO   Float?    @default(0)
+  DT_PAGAMENTO   DateTime? @db.Date
+  CD_BANCO       Int?      @default(0) @db.SmallInt
+  CD_TPPAG       Int?      @default(0) @db.SmallInt
+  NR_DOCPAG      String?   @db.VarChar(20)
+  TP_CONTA       String    @db.VarChar(1)
+  TP_STATUS      String    @db.VarChar(1)
+  VL_MULTA       Float?    @default(0)
+  VL_JURO        Float?    @default(0)
+  VL_DESC        Float?    @default(0)
+  NM_CANCELA     String?   @db.VarChar(100)
+  TP_MOVIMENTO   Int?      @default(0) @db.SmallInt
+  NM_USUARIO     String?   @db.VarChar(50)
+  CD_EMPRESA     Int?      @default(0) @db.SmallInt
+  CD_LOJA        Int?      @default(0) @db.SmallInt
+  TP_FINANCEIRO  Int?      @default(1)
+  CD_MOVBANCO    Int?      @default(0)
+  CD_MOVCAIXA    Int?      @default(0)
+  TP_CONFERIDO   Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO   DateTime? @db.Date
+  NM_CONFERIDO   String?   @db.VarChar(50)
+  TP_PAGAMENTO   Int?      @default(0) @db.SmallInt
+  TP_OFICINA     Int?      @default(0) @db.SmallInt
+  VL_OUTROS      Float?
+  VL_DINHEIRO    Float?    @default(0)
+  VL_CHEQUE      Float?    @default(0)
+  VL_DEBCREDITO  Float?
+  VL_CNTCORRENTE Float?
+  CK_DINHEIRO    Int?      @default(0) @db.SmallInt
+  CK_CHEQUE      Int?      @default(0) @db.SmallInt
+  CK_DEBCREDITO  Int?      @default(0) @db.SmallInt
+  CK_CNTCORRENTE Int?      @default(0) @db.SmallInt
+  CD_USUARIO     Int?      @db.SmallInt
+  TP_WEB         Int?      @default(0) @db.SmallInt
+  TP_TIPOPG      Int?      @db.SmallInt
+  CD_CONTASFINAN Int?      @default(0) @db.SmallInt
+  CD_PATRIMONIO  Int?      @db.SmallInt
+  CD_FACTORING   Int?      @db.SmallInt
+
+  @@index([CD_AQUISICAO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CENTCUSTO], map: "FLUXOCXCD_CENTCUSTO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+  @@index([CD_FORNECEDOR], map: "FLUXOCXCD_FORNECEDOR")
+}
+
+model FLUXOCX1 {
+  CD_FLUXOCX    Int       @id @default(0)
+  CD_FORNECEDOR Int?      @default(0) @db.SmallInt
+  CD_CLIENTE    Int?      @default(0)
+  CD_AQUISICAO  Int?      @default(0)
+  DT_EMISSAO    DateTime? @db.DateTime(0)
+  DT_VENCIMENTO DateTime? @db.DateTime(0)
+  NM_DESCRICAO  String?   @db.VarChar(100)
+  CD_CENTCUSTO  Int?      @default(0) @db.SmallInt
+  CD_TPDOC      Int?      @default(0) @db.SmallInt
+  NR_DOC        String?   @db.VarChar(20)
+  VL_DOC        Float?    @default(0)
+  VL_CHEQUE     Float?    @default(0)
+  VL_DINHEIRO   Float?    @default(0)
+  NM_OBS        String?   @db.VarChar(100)
+  VL_MOVIMENTO  Float?    @default(0)
+  DT_PAGAMENTO  DateTime? @db.DateTime(0)
+  CD_BANCO      Int?      @default(0) @db.SmallInt
+  CD_TPPAG      Int?      @default(0) @db.SmallInt
+  NR_DOCPAG     String?   @db.VarChar(20)
+  TP_CONTA      String    @db.VarChar(1)
+  TP_STATUS     String    @db.VarChar(1)
+  VL_MULTA      Float?    @default(0)
+  VL_JURO       Float?    @default(0)
+  VL_DESC       Float?    @default(0)
+  NM_CANCELA    String?   @db.VarChar(100)
+  TP_MOVIMENTO  Int?      @default(0) @db.SmallInt
+  NM_USUARIO    String?   @db.VarChar(50)
+  CD_EMPRESA    Int?      @default(0) @db.SmallInt
+  CD_LOJA       Int?      @default(0) @db.SmallInt
+  TP_FINANCEIRO Int?      @default(1)
+  CD_MOVBANCO   Int?      @default(0)
+  CD_MOVCAIXA   Int?      @default(0)
+  TP_CONFERIDO  Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO  DateTime? @db.DateTime(0)
+  NM_CONFERIDO  String?   @db.VarChar(50)
+
+  @@index([CD_AQUISICAO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CENTCUSTO], map: "FLUXOCXCD_CENTCUSTO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+  @@index([CD_FORNECEDOR], map: "FLUXOCXCD_FORNECEDOR")
+}
+
+model FLUXOCXLJ {
+  CD_FLUXOCX     Int       @id @default(0)
+  CD_FORNECEDOR  Int?      @default(0) @db.SmallInt
+  CD_CLIENTE     Int?      @default(0)
+  CD_AQUISICAO   Int?      @default(0)
+  DT_EMISSAO     DateTime? @db.Date
+  DT_VENCIMENTO  DateTime? @db.Date
+  NM_DESCRICAO   String?   @db.VarChar(100)
+  CD_CENTCUSTO   Int?      @default(0) @db.SmallInt
+  CD_TPDOC       Int?      @default(0) @db.SmallInt
+  NR_DOC         String?   @db.VarChar(20)
+  VL_DOC         Float?    @default(0)
+  NM_OBS         String?   @db.VarChar(100)
+  VL_MOVIMENTO   Float?    @default(0)
+  DT_PAGAMENTO   DateTime? @db.Date
+  CD_BANCO       Int?      @default(0) @db.SmallInt
+  CD_TPPAG       Int?      @default(0) @db.SmallInt
+  NR_DOCPAG      String?   @db.VarChar(20)
+  TP_CONTA       String    @db.VarChar(1)
+  TP_STATUS      String    @db.VarChar(1)
+  VL_MULTA       Float?    @default(0)
+  VL_JURO        Float?    @default(0)
+  VL_DESC        Float?    @default(0)
+  NM_CANCELA     String?   @db.VarChar(100)
+  TP_MOVIMENTO   Int?      @default(0) @db.SmallInt
+  NM_USUARIO     String?   @db.VarChar(50)
+  CD_EMPRESA     Int?      @default(0) @db.SmallInt
+  CD_LOJA        Int?      @default(0) @db.SmallInt
+  TP_FINANCEIRO  Int?      @default(1)
+  CD_MOVBANCO    Int?      @default(0)
+  CD_MOVCAIXA    Int?      @default(0)
+  TP_CONFERIDO   Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO   DateTime? @db.Date
+  NM_CONFERIDO   String?   @db.VarChar(50)
+  TP_PAGAMENTO   Int?      @default(0) @db.SmallInt
+  TP_OFICINA     Int?      @default(0) @db.SmallInt
+  VL_OUTROS      Float?
+  VL_DINHEIRO    Float?    @default(0)
+  VL_CHEQUE      Float?    @default(0)
+  VL_DEBCREDITO  Float?
+  VL_CNTCORRENTE Float?
+  CK_DINHEIRO    Int?      @default(0) @db.SmallInt
+  CK_CHEQUE      Int?      @default(0) @db.SmallInt
+  CK_DEBCREDITO  Int?      @default(0) @db.SmallInt
+  CK_CNTCORRENTE Int?      @default(0) @db.SmallInt
+  CD_USUARIO     Int?      @db.SmallInt
+  TP_WEB         Int       @default(0) @db.SmallInt
+
+  @@index([CD_AQUISICAO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CENTCUSTO], map: "FLUXOCXCD_CENTCUSTO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+  @@index([CD_FORNECEDOR], map: "FLUXOCXCD_FORNECEDOR")
+}
+
+model FLUXORECDESP {
+  CD_FLUXOCX     Int       @id @default(0)
+  CD_FORNECEDOR  Int?      @default(0) @db.SmallInt
+  CD_CLIENTE     Int?      @default(0)
+  CD_AQUISICAO   Int?      @default(0)
+  DT_EMISSAO     DateTime? @db.Date
+  DT_VENCIMENTO  DateTime? @db.Date
+  NM_DESCRICAO   String?   @db.VarChar(100)
+  CD_CENTCUSTO   Int?      @default(0) @db.SmallInt
+  CD_TPDOC       Int?      @default(0) @db.SmallInt
+  NR_DOC         String?   @db.VarChar(20)
+  VL_DOC         Float?    @default(0)
+  VL_CHEQUE      Float?    @default(0)
+  VL_DINHEIRO    Float?    @default(0)
+  NM_OBS         String?   @db.VarChar(100)
+  VL_MOVIMENTO   Float?    @default(0)
+  DT_PAGAMENTO   DateTime? @db.Date
+  CD_BANCO       Int?      @default(0) @db.SmallInt
+  CD_TPPAG       Int?      @default(0) @db.SmallInt
+  NR_DOCPAG      String?   @db.VarChar(20)
+  TP_CONTA       String    @db.VarChar(1)
+  TP_STATUS      String    @db.VarChar(1)
+  VL_MULTA       Float?    @default(0)
+  VL_JURO        Float?    @default(0)
+  VL_DESC        Float?    @default(0)
+  NM_CANCELA     String?   @db.VarChar(100)
+  TP_MOVIMENTO   Int?      @default(0) @db.SmallInt
+  NM_USUARIO     String?   @db.VarChar(50)
+  CD_EMPRESA     Int?      @default(0) @db.SmallInt
+  CD_LOJA        Int?      @default(0) @db.SmallInt
+  TP_FINANCEIRO  Int?      @default(1)
+  CD_MOVBANCO    Int?      @default(0)
+  CD_MOVCAIXA    Int?      @default(0)
+  TP_CONFERIDO   Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO   DateTime? @db.Date
+  NM_CONFERIDO   String?   @db.VarChar(50)
+  TP_PAGAMENTO   Int?      @default(0) @db.SmallInt
+  CD_PAGADOR     Int?      @default(0)
+  TP_RECIBO      Int?      @db.SmallInt
+  TP_SITUACAO    Int?      @db.SmallInt
+  VL_OUTROS      Float?    @default(0)
+  TP_OFICINA     Int?      @db.SmallInt
+  CD_USUARIO     Int?
+  CK_CHEQUE      Int?      @db.SmallInt
+  CK_DINHEIRO    Int?      @db.SmallInt
+  CK_DEBCREDITO  Int?      @db.SmallInt
+  CK_CNTCORRENTE Int?      @db.SmallInt
+  VL_DEBCREDITO  Float?
+  VL_CNTCORRENTE Float?
+
+  @@index([CD_PAGADOR], map: "CD_AQUISICAO")
+  @@index([CD_AQUISICAO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CENTCUSTO], map: "FLUXOCXCD_CENTCUSTO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+  @@index([CD_FORNECEDOR], map: "FLUXOCXCD_FORNECEDOR")
+}
+
+model FORMPAG {
+  CD_FORMPAG Int    @id @default(0) @db.SmallInt
+  NM_FORMPAG String @unique(map: "NM_CONDPAG") @db.VarChar(25)
+}
+
+model FORNECEDOR {
+  CD_FORNECEDOR  Int     @id @default(0) @db.SmallInt
+  NM_FORNECEDOR  String  @db.VarChar(50)
+  NM_ENDERECO    String? @db.VarChar(50)
+  NR_CEP         String? @db.VarChar(10)
+  NM_COMPLEMENTO String? @db.VarChar(30)
+  NR_FONE1       String? @db.VarChar(14)
+  NR_FONE2       String? @db.VarChar(14)
+  NR_FAX         String? @db.VarChar(14)
+  NR_CGC         String? @db.VarChar(20)
+  NR_CGF         String? @db.VarChar(20)
+  NM_CONTATO     String? @db.VarChar(70)
+  TP_GERAR       Int?    @default(0) @db.SmallInt
+  CD_CENTCUSTO   Int?    @default(0) @db.SmallInt
+  TP_REPETIR     Int?    @default(0) @db.SmallInt
+  TP_ZERAR       Int?    @default(0) @db.SmallInt
+  TP_ATIVO       Int?    @default(0) @db.SmallInt
+  TP_CATEGORIA   Int?    @db.SmallInt
+}
+
+model FUNCIONARIO {
+  CD_FUNCIONARIO Int       @id @default(0) @db.SmallInt
+  NM_FUNCIONARIO String    @db.VarChar(70)
+  NM_ENDERECO    String?   @db.VarChar(50)
+  NR_CEP         String?   @db.VarChar(10)
+  NM_COMPLEMENTO String?   @db.VarChar(30)
+  NR_FONE1       String?   @db.VarChar(13)
+  NR_FONE2       String?   @db.VarChar(13)
+  NR_FONE3       String?   @db.VarChar(13)
+  NM_CARGO       String?   @db.VarChar(50)
+  VL_APOIO       Float?    @default(0)
+  TP_LOJA1       Int?      @default(0) @db.SmallInt
+  TP_LOJA2       Int?      @default(0) @db.SmallInt
+  TP_APOIO       Int?      @default(0) @db.SmallInt
+  TP_ATIVO       Int?      @default(0) @db.SmallInt
+  CD_LOJA        Int?      @default(0) @db.SmallInt
+  NR_CPF         String?   @db.VarChar(14)
+  VL_SALARIO     Float?    @default(0)
+  NM_CONTATO     String?   @db.VarChar(100)
+  DT_ADMISSAO    DateTime? @db.Date
+  CD_ESTADO      Int?      @default(0) @db.SmallInt
+  CD_CIDADE      Int?      @default(0) @db.SmallInt
+  CD_BAIRRO      Int?      @default(0) @db.SmallInt
+  CD_CORRETOR    Int?
+  TP_FUNCAO      Int?      @db.SmallInt
+}
+
+model IMAGEM {
+  CD_IMAGEM    Int       @id
+  CD_AQUISICAO Int
+  NM_IMAGEM    String?   @db.VarChar(255)
+  DT_IMAGEM    DateTime? @default(now()) @db.Timestamp(0)
+  TP_WEB       Int       @default(0) @db.SmallInt
+
+  @@index([CD_AQUISICAO], map: "idx_cdaquisicao")
+  @@index([DT_IMAGEM], map: "idx_dtimagem")
+}
+
+model INFORMATIVO {
+  CD_AQUISICAO  Int @id
+  TP_AR         Int @default(0) @db.SmallInt
+  TP_DIR        Int @default(0) @db.SmallInt
+  TP_VIDRO      Int @default(0) @db.SmallInt
+  TP_TRAVA      Int @default(0) @db.SmallInt
+  TP_ALARME     Int @default(0) @db.SmallInt
+  TP_MULTIMIDIA Int @default(0) @db.SmallInt
+  TP_RODALEVE   Int @default(0) @db.SmallInt
+  TP_BANCOCOURO Int @default(0) @db.SmallInt
+  TP_SOM        Int @default(0) @db.SmallInt
+  TP_AUTO       Int @default(0) @db.SmallInt
+  TP_BLINDADO   Int @default(0) @db.SmallInt
+}
+
+model INFORMEIMP {
+  CD_INFORMEIMP      Int       @id @default(autoincrement())
+  CD_AQUISICAO       Int?
+  NM_IMPCOMPRA1VEZ   String?   @db.VarChar(100)
+  DT_IMPCOMPRA1VEZ   DateTime? @db.Date
+  HR_IMPCOMPRA1VEZ   String?   @db.VarChar(5)
+  NM_IMPPEDIDO1VEZ   String?   @db.VarChar(100)
+  DT_IMPPEDIDO1VEZ   DateTime? @db.Date
+  HR_IMPPEDIDO1VEZ   String?   @db.VarChar(5)
+  NM_IMPCONTRATO1VEZ String?   @db.VarChar(100)
+  DT_IMPCONTRATO1VEZ DateTime? @db.Date
+  HR_IMPCONTRATO1VEZ String?   @db.VarChar(5)
+  NM_IMPCOMPRAALT    String?   @db.VarChar(100)
+  DT_IMPCOMPRAALT    DateTime? @db.Date
+  HR_IMPCOMPRAALT    String?   @db.VarChar(5)
+  NM_IMPPEDIDOALT    String?   @db.VarChar(100)
+  DT_IMPPEDIDOALT    DateTime? @db.Date
+  HR_IMPPEDIDOALT    String?   @db.VarChar(5)
+  NM_IMPCONTRATOALT  String?   @db.VarChar(100)
+  DT_IMPCONTRATOALT  DateTime? @db.Date
+  HR_IMPCONTRATOALT  String?   @db.VarChar(5)
+}
+
+model ITENSMOVCONSORCIO {
+  CD_ITENSMOVCONSORCIO Int       @id @default(0)
+  CD_MOVCONSORCIO      Int?      @default(0)
+  CD_CLIENTE           Int?      @default(0)
+  DT_EMISSAO           DateTime? @db.Date
+  DT_VENCIMENTO        DateTime? @db.Date
+  NM_DESCRICAO         String?   @db.VarChar(100)
+  CD_CENTCUSTO         Int?      @default(0) @db.SmallInt
+  NR_DOC               String?   @db.VarChar(20)
+  VL_DOC               Float?    @default(0)
+  VL_PAGAMENTO         Float?    @default(0)
+  DT_PAGAMENTO         DateTime? @db.DateTime(0)
+  CD_BANCO             Int?      @default(0) @db.SmallInt
+  CD_TPPAG             Int?      @default(0) @db.SmallInt
+  NR_DOCPAG            String?   @db.VarChar(20)
+  TP_STATUS            String    @db.VarChar(1)
+  VL_MULTA             Float?    @default(0)
+  VL_JURO              Float?    @default(0)
+  VL_DESC              Float?    @default(0)
+  VL_CHEQUE            Float?    @default(0)
+  VL_DINHEIRO          Float?    @default(0)
+  NM_CANCELA           String?   @db.VarChar(100)
+  NM_USUARIO           String?   @db.VarChar(50)
+
+  @@index([CD_MOVCONSORCIO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+}
+
+model JORNAL {
+  CD_JORNAL Int    @id @default(0)
+  NM_JORNAL String @db.VarChar(70)
+  NR_LINHA  Float? @default(0)
+  VL_LINHA  Float? @default(0)
+}
+
+model JORNALBAIXA {
+  CD_JORNALBX  Int    @id @default(0)
+  NR_ANO       String @db.VarChar(5)
+  CD_JORNAL    Int?   @default(0)
+  CD_AQUISICAO Int?   @default(0)
+  NR_MES       Int?   @default(0) @db.SmallInt
+  QT_DIA01     Int?   @default(0) @db.SmallInt
+  VL_DIA01     Float? @default(0)
+  QT_DIA02     Int?   @default(0) @db.SmallInt
+  VL_DIA02     Float? @default(0)
+  QT_DIA03     Int?   @default(0) @db.SmallInt
+  VL_DIA03     Float? @default(0)
+  QT_DIA04     Int?   @default(0) @db.SmallInt
+  VL_DIA04     Float? @default(0)
+  QT_DIA05     Int?   @default(0) @db.SmallInt
+  VL_DIA05     Float? @default(0)
+  QT_DIA06     Int?   @default(0) @db.SmallInt
+  VL_DIA06     Float? @default(0)
+  QT_DIA07     Int?   @default(0) @db.SmallInt
+  VL_DIA07     Float? @default(0)
+  QT_DIA08     Int?   @default(0) @db.SmallInt
+  VL_DIA08     Float? @default(0)
+  QT_DIA09     Int?   @default(0) @db.SmallInt
+  VL_DIA09     Float? @default(0)
+  QT_DIA10     Int?   @default(0) @db.SmallInt
+  VL_DIA10     Float? @default(0)
+  QT_DIA11     Int?   @default(0) @db.SmallInt
+  VL_DIA11     Float? @default(0)
+  QT_DIA12     Int?   @default(0) @db.SmallInt
+  VL_DIA12     Float? @default(0)
+  QT_DIA13     Int?   @default(0) @db.SmallInt
+  VL_DIA13     Float? @default(0)
+  QT_DIA14     Int?   @default(0) @db.SmallInt
+  VL_DIA14     Float? @default(0)
+  QT_DIA15     Int?   @default(0) @db.SmallInt
+  VL_DIA15     Float? @default(0)
+  QT_DIA16     Int?   @default(0) @db.SmallInt
+  VL_DIA16     Float? @default(0)
+  QT_DIA17     Int?   @default(0) @db.SmallInt
+  VL_DIA17     Float? @default(0)
+  QT_DIA18     Int?   @default(0) @db.SmallInt
+  VL_DIA18     Float? @default(0)
+  QT_DIA19     Int?   @default(0) @db.SmallInt
+  VL_DIA19     Float? @default(0)
+  QT_DIA20     Int?   @default(0) @db.SmallInt
+  VL_DIA20     Float? @default(0)
+  QT_DIA21     Int?   @default(0) @db.SmallInt
+  VL_DIA21     Float? @default(0)
+  QT_DIA22     Int?   @default(0) @db.SmallInt
+  VL_DIA22     Float? @default(0)
+  QT_DIA23     Int?   @default(0) @db.SmallInt
+  VL_DIA23     Float? @default(0)
+  QT_DIA24     Int?   @default(0) @db.SmallInt
+  VL_DIA24     Float? @default(0)
+  QT_DIA25     Int?   @default(0) @db.SmallInt
+  VL_DIA25     Float? @default(0)
+  QT_DIA26     Int?   @default(0) @db.SmallInt
+  VL_DIA26     Float? @default(0)
+  QT_DIA27     Int?   @default(0) @db.SmallInt
+  VL_DIA27     Float? @default(0)
+  QT_DIA28     Int?   @default(0) @db.SmallInt
+  VL_DIA28     Float? @default(0)
+  QT_DIA29     Int?   @default(0) @db.SmallInt
+  VL_DIA29     Float? @default(0)
+  QT_DIA30     Int?   @default(0) @db.SmallInt
+  VL_DIA30     Float? @default(0)
+  QT_DIA31     Int?   @default(0) @db.SmallInt
+  VL_DIA31     Float? @default(0)
+}
+
+model JORNALBX {
+  CD_JORNALBX  Int      @id @default(0)
+  DT_MOVIMENTO DateTime @db.Date
+  CD_JORNAL    Int?     @default(0)
+  QT_UTILIZADA Float?   @default(0)
+  VL_LINHA     Float?   @default(0)
+  CD_AQUISICAO Int?     @default(0)
+}
+
+model JORNALCOMP {
+  CD_JORNALCOMP Int      @id @default(0)
+  DT_MOVIMENTO  DateTime @db.DateTime(0)
+  CD_JORNAL     Int?     @default(0)
+  QT_COMPRA     Float?   @default(0)
+  VL_LINHA      Float?   @default(0)
+}
+
+model KFMETADE {
+  CD_AQUISICAO Int       @id
+  CD_FLUXOCX   Int
+  DT_CADASTRO  DateTime  @db.Date
+  VL_VALOR     Float
+  DT_BAIXA     DateTime? @db.Date
+  TP_SITUACAO  Int?      @default(2) @db.SmallInt
+  NM_OBS       String?   @db.Text
+}
+
+model LOCAL {
+  CD_LOCAL Int     @id @default(0) @db.SmallInt
+  NM_LOCAL String  @db.VarChar(50)
+  NM_SIGLA String? @db.VarChar(3)
+}
+
+model LOGMOVIMENTO {
+  CD_LOGMOVIMENTO Int       @id @default(0) @db.SmallInt
+  DT_CANCELVND    DateTime? @db.Date
+  DT_ALTMOVIMENTO DateTime? @db.Date
+  HR_CANCELVND    String?   @db.VarChar(5)
+  HR_ALTMOVIMENTO String?   @db.VarChar(5)
+  NM_USUARIO      String?   @db.VarChar(100)
+  CD_AQUISICAO    Int?
+  CD_AQUISREC     Int?
+  NM_MOTIVO       String?   @db.VarChar(255)
+  DT_AQUISICAO    DateTime? @db.Date
+  DT_AQUISICAOOLD DateTime? @db.Date
+  VL_VEICULO      Float?    @default(0)
+  VL_VEICULOOLD   Float?    @default(0)
+  DT_PAGAMENTO    DateTime? @db.Date
+  DT_PAGAMENTOOLD DateTime? @db.Date
+  VL_PEDIDO       Float?    @default(0)
+  VL_PEDIDOOLD    Float?    @default(0)
+  DT_VENDA        DateTime? @db.Date
+  DT_VENDAOLD     DateTime? @db.Date
+  VL_RECEBIDO     Float?    @default(0)
+  VL_RECEBIDOOLD  Float?    @default(0)
+}
+
+model LOJA {
+  CD_LOJA       Int     @id @default(0)
+  NM_LOJA       String  @db.VarChar(70)
+  NR_FONE1      String? @db.VarChar(20)
+  NR_FONE2      String? @db.VarChar(20)
+  NM_CONTATO    String? @db.VarChar(50)
+  CD_FORNECEDOR Int?
+  CD_CENTCUSTO  Int?
+  NR_FAX        String? @db.VarChar(14)
+}
+
+model MARCA {
+  CD_MARCA Int    @id @default(0) @db.SmallInt
+  NM_MARCA String @db.VarChar(50)
+}
+
+model MOVBANCO {
+  CD_MOVBANCO         Int       @id @default(0)
+  CD_BANCO            Int       @default(0)
+  DT_MOVIMENTO        DateTime? @db.Date
+  NM_DESCRICAO        String?   @db.VarChar(200)
+  CD_TPPAG            Int?      @default(0) @db.SmallInt
+  NR_CHEQUE           String?   @db.VarChar(20)
+  TP_CONTA            String    @db.VarChar(1)
+  VL_CHEQUE           Float?    @default(0)
+  VL_DINHEIRO         Float?    @default(0)
+  VL_CNTCORRENTE      Float?
+  VL_MOVIMENTO        Float?    @default(0)
+  NM_CANCELA          String?   @db.Text
+  NM_USUARIO          String?   @db.VarChar(50)
+  TP_STATUS           String    @db.VarChar(1)
+  CD_FLUXOCX          Int?      @default(0)
+  CD_CENTCUSTO        Int?      @default(0) @db.SmallInt
+  CD_AQUISICAO        Int?      @default(0)
+  CD_EMPRESA          Int?      @default(0)
+  CK_DINHEIRO         Int?      @default(0) @db.SmallInt
+  CK_CHEQUE           Int?      @default(0) @db.SmallInt
+  CK_CNTCORRENTE      Int?      @default(0) @db.SmallInt
+  CD_CONTASFINAN      Int?      @db.SmallInt
+  CD_MOVCAIXA         Int?      @default(0)
+  CD_CHEQUESRECEBIDOS Int?
+  CD_FINANCIAMENTO    Int?
+  CD_FACTORING        Int?
+  DT_CANCELA          DateTime? @db.Date
+  TP_ORIGEM           Int       @default(0) @db.SmallInt
+  TP_MOVIMENTO        Int       @default(0) @db.SmallInt
+  CD_PAGAMENTO        Int?
+}
+
+model MOVCAIXA {
+  CD_MOVCAIXA         Int       @id @default(0)
+  CD_FORNECEDOR       Int?      @default(0) @db.SmallInt
+  CD_CLIENTE          Int?      @default(0)
+  CD_AQUISICAO        Int?      @default(0)
+  DT_EMISSAO          DateTime? @db.Date
+  DT_VENCIMENTO       DateTime? @db.Date
+  NM_DESCRICAO        String?   @db.VarChar(200)
+  CD_CENTCUSTO        Int?      @default(0) @db.SmallInt
+  CD_TPDOC            Int?      @default(0) @db.SmallInt
+  NR_DOC              String?   @db.VarChar(20)
+  VL_DOC              Float?    @default(0)
+  NM_OBS              String?   @db.VarChar(100)
+  VL_MOVIMENTO        Float?    @default(0)
+  DT_PAGAMENTO        DateTime? @db.Date
+  CD_BANCO            Int?      @default(0) @db.SmallInt
+  CD_TPPAG            Int?      @default(0) @db.SmallInt
+  NR_DOCPAG           String?   @db.VarChar(20)
+  TP_CONTA            String    @db.VarChar(1)
+  TP_STATUS           String    @db.VarChar(1)
+  VL_MULTA            Float?    @default(0)
+  VL_JURO             Float?    @default(0)
+  VL_DESC             Float?    @default(0)
+  NM_CANCELA          String?   @db.Text
+  TP_MOVIMENTO        Int?      @default(0) @db.SmallInt
+  NM_USUARIO          String?   @db.VarChar(50)
+  CD_EMPRESA          Int?      @default(0) @db.SmallInt
+  CD_LOJA             Int?      @default(0) @db.SmallInt
+  TP_FINANCEIRO       Int?      @default(1)
+  CD_MOVBANCO         Int?      @default(0)
+  CD_FLUXOCX          Int?      @default(0)
+  TP_CONFERIDO        Int?      @default(0) @db.SmallInt
+  DT_CONFERIDO        DateTime? @db.Date
+  NM_CONFERIDO        String?   @db.VarChar(50)
+  TP_PAGAMENTO        Int?      @default(0) @db.SmallInt
+  TP_OFICINA          Int?      @default(0) @db.SmallInt
+  VL_OUTROS           Float?
+  VL_DINHEIRO         Float?    @default(0)
+  VL_CHEQUE           Float?    @default(0)
+  VL_DEBCREDITO       Float?
+  VL_CNTCORRENTE      Float?
+  CK_DINHEIRO         Int?      @default(0) @db.SmallInt
+  CK_CHEQUE           Int?      @default(0) @db.SmallInt
+  CK_DEBCREDITO       Int?      @default(0) @db.SmallInt
+  CK_CNTCORRENTE      Int?      @default(0) @db.SmallInt
+  CD_USUARIO          Int?      @db.SmallInt
+  CD_CONTASFINAN      Int?      @db.SmallInt
+  CD_CHEQUESRECEBIDOS Int?
+  CD_FACTORING        Int?
+  DT_CANCELA          DateTime? @db.Date
+  TP_ORIGEM           Int       @default(0) @db.SmallInt
+  DT_MOVIMENTO        DateTime? @db.Date
+  NR_ORDEM            String?   @db.VarChar(12)
+  NR_CHEQUE           String?   @db.VarChar(12)
+  TP_RECIBO           Int?      @db.SmallInt
+  NM_BANCO            String?   @db.VarChar(100)
+  CD_PAGAMENTO        Int?
+
+  @@index([CD_AQUISICAO], map: "FLUXOCXCD_AQUISICAO")
+  @@index([CD_BANCO], map: "FLUXOCXCD_BANCO")
+  @@index([CD_CENTCUSTO], map: "FLUXOCXCD_CENTCUSTO")
+  @@index([CD_CLIENTE], map: "FLUXOCXCD_CLIENTE")
+  @@index([CD_FORNECEDOR], map: "FLUXOCXCD_FORNECEDOR")
+}
+
+model MOVCONSORCIO {
+  CD_MOVCONSORCIO Int       @id @default(0) @db.SmallInt
+  CD_CONSORCIO    Int?      @default(0) @db.SmallInt
+  CD_CLIENTE      Int?      @default(0) @db.SmallInt
+  NR_GRUPO        String?   @db.VarChar(15)
+  NR_COTA         String?   @db.VarChar(5)
+  DT_AQUISICAO    DateTime? @db.Date
+  DT_PAGAMENTO    DateTime? @db.Date
+  VL_CARTA        Float?    @default(0)
+  VL_NEGOCIADA    Float?    @default(0)
+  TP_MOVIMENTO    Int?      @default(0) @db.SmallInt
+  NM_BEMCONSORCIO String?   @db.VarChar(255)
+  QT_PARCELA      Int?      @default(0) @db.SmallInt
+  QT_PAGAS        Int?      @default(0) @db.SmallInt
+  VL_PARCELA      Float?    @default(0)
+  FL_STATUS       Int?      @default(0) @db.SmallInt
+}
+
+model MOVFINAN {
+  CD_MOVFINAN  Int     @id @default(0)
+  CD_AQUISICAO Int?    @default(0)
+  NM_MOVFINAN  String  @db.VarChar(70)
+  VL_MOVFINAN  Float?  @default(0)
+  CD_PAGADOR   Int?    @default(0) @db.SmallInt
+  CD_BANCO     Int?    @default(0) @db.SmallInt
+  CD_TPPAG     Int?    @default(0) @db.SmallInt
+  VL_CHEQUE    Float?  @default(0)
+  VL_DINHEIRO  Float?  @default(0)
+  NM_CANCELA   String? @db.VarChar(100)
+
+  @@index([CD_BANCO], map: "CD_BANCO")
+}
+
+model MOVOPER {
+  CD_OPERADOR Int    @id @default(0) @db.SmallInt
+  NM_REGISTRO String @db.VarChar(7)
+  NM_ANO      String @db.VarChar(2)
+}
+
+model MOVSISTEMA {
+  CD_MOVSISTEMA Int       @id @default(0)
+  DT_MOVSISTEMA DateTime? @db.Date
+  HR_MOVSISTEMA String?   @db.VarChar(5)
+  CD_AQUISICAO  Int?
+  NM_DESCRICAO  String?   @db.VarChar(255)
+  NM_USUARIO    String?   @db.VarChar(20)
+  TP_MOVIMENTO  Int?      @db.SmallInt
+  NR_VERSAO     String?   @db.VarChar(15)
+}
+
+model MOVVALE {
+  CD_MOVVALE     Int       @id @default(0)
+  CD_FUNCIONARIO Int?      @default(0) @db.SmallInt
+  DT_VALE        DateTime? @db.Date
+  VL_VALE        Float?    @default(0)
+  TP_VALE        Int?      @default(0) @db.SmallInt
+  NM_OBSVALE     String?   @db.VarChar(100)
+  DT_VENCIMENTO  DateTime? @db.Date
+  NR_PARCELA     Int?      @default(0) @db.SmallInt
+  VL_PARCELA     Float?    @default(0)
+  TP_PAGAMENTO   Int?      @default(0) @db.SmallInt
+  TP_TIPO        Int?      @default(0) @db.SmallInt
+
+  @@index([CD_FUNCIONARIO], map: "Index_func")
+}
+
+model OCORRENCIA {
+  CD_OCORRENCIA Int       @default(0)
+  DT_OCORRENCIA DateTime  @db.Date
+  CD_AQUISICAO  Int       @default(0)
+  CD_PLACA      String    @db.VarChar(7)
+  NM_OCORRENCIA String    @db.VarChar(255)
+  FL_OCORRENCIA Int?      @default(0) @db.SmallInt
+  AQUISICAO     AQUISICAO @relation(fields: [CD_AQUISICAO], references: [CD_AQUISICAO], onDelete: Cascade, map: "AQUISICAOOCORRENCIA")
+
+  @@id([CD_OCORRENCIA, DT_OCORRENCIA, CD_AQUISICAO, CD_PLACA])
+  @@index([CD_AQUISICAO], map: "OCORRENCIACD_MOVIMENTO")
+}
+
+model OPERADOR {
+  CD_OPERADOR   Int     @id @default(0) @db.SmallInt
+  NM_OPERADOR   String  @db.VarChar(50)
+  NR_FONE       String? @db.VarChar(15)
+  NR_CELULAR    String? @db.VarChar(15)
+  CD_FINANCEIRA Int     @default(0) @db.SmallInt
+}
+
+model ORDEM {
+  CD_MESANO String @id @db.VarChar(7)
+  NR_ORDEM  Int?   @default(0)
+}
+
+model PAGADOR {
+  CD_PAGADOR Int    @id @default(0) @db.SmallInt
+  NM_PAGADOR String @db.VarChar(30)
+}
+
+model PAGAMENTO {
+  CD_PAGAMENTO   Int        @id @default(0)
+  CD_AQUISICAO   Int?       @default(0)
+  NM_DESCRICAO   String     @db.VarChar(255)
+  VL_VALOR       Float?     @default(0)
+  TP_TIPO        Int?       @default(0) @db.SmallInt
+  CD_CONTASFINAN Int?
+  TP_TIPOCONTA   Int?       @default(0) @db.SmallInt
+  CD_ORIGEM      Int?       @default(0) @db.SmallInt
+  TP_MOVIMENTO   String?    @db.VarChar(2)
+  CD_FLUXOCX     Int?
+  DT_PAGAMENTO   DateTime?  @db.Date
+  AQUISICAO      AQUISICAO? @relation(fields: [CD_AQUISICAO], references: [CD_AQUISICAO], onDelete: Cascade, map: "AQUISICAOPAGAMENTO")
+
+  @@index([CD_AQUISICAO], map: "AQUISICAOPAGAMENTO")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PARAM {
+  CD_EMPRESA     Int?    @db.SmallInt
+  NM_EMPRESA     String? @db.VarChar(70)
+  NM_ENDERECO    String? @db.VarChar(255)
+  NM_BAIRRO      String? @db.VarChar(30)
+  NR_CEP         String? @db.VarChar(10)
+  NM_CIDADE      String? @db.VarChar(30)
+  NM_ESTADO      String? @db.VarChar(20)
+  NR_TELEFONE1   String? @db.VarChar(15)
+  NR_TELEFONE2   String? @db.VarChar(15)
+  NR_CGC         String? @db.VarChar(20)
+  NR_CGF         String? @db.VarChar(15)
+  PR_REAJUSTE    Float?  @default(0)
+  NM_FANTASIA    String? @db.VarChar(100)
+  TP_FINAN       Int?    @default(0) @db.SmallInt
+  NM_SITE        String? @db.VarChar(255)
+  NM_SOCIO       String? @default("") @db.VarChar(255)
+  NR_CPFSOCIO    String? @default("") @db.VarChar(255)
+  NR_RGSOCIO     String? @default("") @db.VarChar(255)
+  NM_EMAIL       String? @db.VarChar(150)
+  NR_NUMERO      String? @db.VarChar(5)
+  NM_COMPLEMENTO String? @db.VarChar(100)
+  NR_FONESOCIO   String? @db.VarChar(15)
+  CD_CLIENTEREF  Int?    @db.SmallInt
+
+  @@ignore
+}
+
+model PARCELA {
+  CD_PARCELA Int  @id @unique(map: "CD_GRUPO") @default(0) @db.SmallInt
+  NM_PARCELA Int? @default(0) @db.SmallInt
+}
+
+model PENDENCIA {
+  CD_PENDENCIA    Int       @id
+  DT_PENDENCIA    DateTime  @db.Date
+  DT_VENCIMENTO   DateTime  @db.Date
+  CD_AQUISICAO    Int
+  CD_DOCUMENTACAO Int
+  NM_PENDENCIA    String?   @db.VarChar(255)
+  CD_USUCADASTRO  Int       @db.SmallInt
+  FL_PENDENCIA    Int       @default(0) @db.SmallInt
+  DT_RESOLVIDO    DateTime? @db.Date
+  CD_USURESOLVIDO Int?      @db.SmallInt
+
+  @@index([CD_AQUISICAO], map: "Index_CD_AQUISICAO")
+  @@index([CD_DOCUMENTACAO], map: "Index_CD_DOCUMENTACAO")
+  @@index([CD_USUCADASTRO, CD_USURESOLVIDO], map: "Index_CD_USUARIO")
+  @@index([DT_VENCIMENTO], map: "Index_DT_VENCIMENTO")
+  @@index([FL_PENDENCIA], map: "Index_FL_PENDENCIA")
+}
+
+model REFINANCIAMENTO {
+  CD_REFINANCIAMENTO Int       @id @default(0)
+  DT_REFINANCIAMENTO DateTime? @db.Date
+  CD_FINANCEIRA      Int?      @default(0) @db.SmallInt
+  CD_CLIENTE         Int?      @default(0)
+  QT_PRESTACAO       Int?      @default(0) @db.SmallInt
+  VL_PRESTACAO       Float?    @default(0)
+  VL_FINANCIADO      String?   @db.VarChar(50)
+  CD_FUNCIONARIO     Int?      @default(0) @db.SmallInt
+  VL_COMISSAORET     Float?    @default(0)
+  TB_RETORNO         Float?    @default(0)
+  NR_PLACA           String?   @db.VarChar(7)
+  CD_MODELO          Int?      @default(0) @db.SmallInt
+  NM_COR             String?   @db.VarChar(50)
+  NM_ANO             String?   @db.VarChar(9)
+  VL_RETLOJA         Float?    @default(0)
+  VL_RETFUNC         Float?    @default(0)
+  VL_TAC             Float?    @default(0)
+  TP_TAC             Int?      @default(0) @db.SmallInt
+  VL_COMISSAOEXTRA   Float?    @default(0)
+  TP_FINANCIAMENTO   Int?      @default(0) @db.SmallInt
+  NM_OBSERVACAO      String?   @db.VarChar(255)
+  VL_REFFINANCIADO   String?   @db.VarChar(50)
+  TP_SITUACAO        Int?      @default(0) @db.SmallInt
+  CD_FINANCEIRAPAGTO Int?      @default(0) @db.SmallInt
+  DT_PAGAMENTO       DateTime? @db.Date
+  VL_PAGO            Float?    @default(0)
+  TB_RETORNOPG       Float?    @default(0)
+  VL_BRUTO           Float?    @default(0)
+  VL_LIQUIDO         Float?    @default(0)
+  VL_DEVTAC          Float?    @default(0)
+  VL_OUTVAL          Float?    @default(0)
+  DT_CREDITO         DateTime? @db.Date
+  DT_RECEBIMENTO     DateTime? @db.Date
+  VL_CORRETOR        Float?    @default(0)
+  CD_CORRETORPAGTO   Int?      @default(0) @db.SmallInt
+}
+
+model SALDBANCO {
+  DT_SALDOINI DateTime @db.DateTime(0)
+  CD_BANCO    Int      @default(0)
+  VL_SALDOINI Float?   @default(0)
+
+  @@id([DT_SALDOINI, CD_BANCO])
+}
+
+model SALDOINI {
+  DT_SALDOINI DateTime @id @db.DateTime(0)
+  VL_SALDOINI Float?   @default(0)
+}
+
+model SITUACAO {
+  CD_SITUACAO Int     @id @default(0) @db.SmallInt
+  NM_SITUACAO String? @db.VarChar(100)
+}
+
+model TABERRO {
+  CD_ERRO Int     @id
+  NM_ERRO String? @db.LongText
+}
+
+model TPDOC {
+  CD_TPDOC    Int    @id @default(0) @db.SmallInt
+  NM_TPDOC    String @db.VarChar(30)
+  TP_SITUACAO Int?   @default(0) @db.SmallInt
+  TP_ATIVO    Int?   @default(0) @db.SmallInt
+  TP_TIPO     Int?   @default(0) @db.SmallInt
+}
+
+model TRANSAC {
+  CD_TRANSAC Int     @id @default(0) @db.SmallInt
+  NM_TRANSAC String? @db.VarChar(70)
+}
+
+model TRANSACAO {
+  CD_TRANSACAO   Int    @id @default(0) @db.SmallInt
+  NM_TRANSACAO   String @db.VarChar(30)
+  TP_TRANSACAO   Int?   @default(0) @db.SmallInt
+  TP_JUROS       Int?   @default(0) @db.SmallInt
+  CD_LOJA        Int?   @default(0)
+  TP_FINANCEIRO  Int?   @default(0) @db.SmallInt
+  TP_EXCLUI      Int?   @default(0) @db.SmallInt
+  TP_ATIVO       Int?   @default(0) @db.SmallInt
+  TP_CONSIGNACAO Int?   @default(0) @db.SmallInt
+}
+
+model TROCAPLACA {
+  CD_TROCAPLACA  Int       @id @default(autoincrement())
+  CD_AQUISICAO   Int?      @unique(map: "CD_AQUISICAO") @default(0)
+  NR_PLACA       String?   @db.VarChar(7)
+  NR_PLACAOLD    String?   @db.VarChar(7)
+  NM_USUTROCA    String?   @db.VarChar(50)
+  NM_USUAPOIO    String?   @db.VarChar(50)
+  NM_MOTIVOTROCA String?   @db.VarChar(200)
+  DT_TROCAPLACA  DateTime? @db.Date
+}
+
+model USUARIO {
+  CD_USUARIO     Int    @id @unique(map: "CD_USUARIO") @default(0) @db.SmallInt
+  NM_USUARIO     String @db.VarChar(50)
+  NM_USU         String @db.VarChar(15)
+  NM_SENHA       String @db.VarChar(6)
+  FL_ATIVO       String @db.VarChar(1)
+  TP_NIVEL       Int?   @default(0) @db.SmallInt
+  TP_PODER       Int?   @default(0) @db.SmallInt
+  TP_FINAN       Int?   @default(0) @db.SmallInt
+  TP_COMER       Int?   @default(0) @db.SmallInt
+  TP_CANCELAR    Int?   @default(0) @db.SmallInt
+  CD_DIRETOR     Int?   @default(0) @db.SmallInt
+  TP_NF          Int?   @default(0) @db.SmallInt
+  TP_FECHACAIXA  Int?   @default(0) @db.SmallInt
+  TP_EXCLUIR     Int?   @default(0) @db.SmallInt
+  TP_WEB         Int    @default(0) @db.SmallInt
+  CD_CONTASFINAN Int?   @default(0) @db.SmallInt
+  CD_CORRETOR    Int?   @db.SmallInt
+  TP_RELVENDA    Int?   @default(1) @db.SmallInt
+  TP_COR         Int?   @default(0) @db.SmallInt
+}
+
+model USUTRANSAC {
+  CD_USUARIO Int @default(0) @db.SmallInt
+  CD_TRANSAC Int @default(0) @db.SmallInt
+
+  @@id([CD_USUARIO, CD_TRANSAC])
+}
+
+model VEICULO {
+  CD_VEICULO Int    @id @default(0) @db.SmallInt
+  NM_MODELO  String @db.VarChar(30)
+  CD_MARCA   Int?   @default(0) @db.SmallInt
+
+  @@index([CD_MARCA], map: "Index_cd_marca")
+}
+
+model VENDEDOR {
+  CD_VENDEDOR Int     @id @unique(map: "CD_VENDEDOR") @default(0) @db.SmallInt
+  NM_VENDEDOR String  @db.VarChar(50)
+  NR_CPF      String? @db.VarChar(14)
+  NR_RG       String? @db.VarChar(20)
+  NM_ENDERECO String? @db.VarChar(80)
+  NR_FONE     String? @db.VarChar(11)
+  NR_CELULAR  String? @db.VarChar(11)
+  TP_TIPO     Int?    @default(0) @db.SmallInt
+  TP_COMISSAO Int?    @db.SmallInt
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WEB {
+  NM_SERVER   String?   @db.VarChar(100)
+  NM_PORTA    String?   @db.VarChar(8)
+  NM_USUARIO  String?   @db.VarChar(20)
+  NM_SENHA    String?   @db.VarChar(20)
+  NM_DATABASE String?   @db.VarChar(20)
+  DT_ULTTENT  DateTime? @db.Date
+  QT_TENT     Int?      @default(0)
+  DT_ULTSINC  DateTime? @db.Date
+  FL_STATUS   Int?      @default(0)
+  FL_PAGO     Int?      @default(0)
+
+  @@ignore
+}
