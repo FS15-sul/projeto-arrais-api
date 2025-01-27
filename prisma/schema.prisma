@@ -222,6 +222,8 @@ model AQUISICAO {
   OCORRENCIA          OCORRENCIA[]
   PAGAMENTO           PAGAMENTO[]
 
+  VEICULO             VEICULO?    @relation(fields: [CD_MODELO], references: [CD_VEICULO], onDelete: NoAction, onUpdate: NoAction)
+
   @@index([CD_CORRETOR, CD_CORRETORVENDA], map: "CD_CORRETOR")
   @@index([CD_MODELO], map: "CD_MODELO")
   @@index([CD_TRANSACAO, CD_TRANSACVENDA], map: "CD_TRANSACAO")
@@ -1676,6 +1678,8 @@ model VEICULO {
   CD_VEICULO Int    @id @default(0) @db.SmallInt
   NM_MODELO  String @db.VarChar(30)
   CD_MARCA   Int?   @default(0) @db.SmallInt
+
+  AQUISICOES AQUISICAO[]
 
   @@index([CD_MARCA], map: "Index_cd_marca")
 }
