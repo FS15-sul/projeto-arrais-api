@@ -3,11 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 async function getAquisicoes() {
-    return await prisma.aQUISICAO.findMany({
-        include: {
-            VEICULO: true // Inclui as informações do modelo do veículo
-        }
-    })
+    return await prisma.aQUISICAO.findMany()
 }
 
 async function getAquisicao(id) {

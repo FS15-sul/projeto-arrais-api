@@ -215,14 +215,13 @@ model AQUISICAO {
   TP_ZERALUCRO        Int?         @default(0) @db.SmallInt
   TP_CALCJUROS        Int?         @default(0) @db.SmallInt
   TP_BLINDADO         Int?         @default(0) @db.SmallInt
+  NM_MODELO           String?      @db.VarChar(50)
   ACESAQUIS           ACESAQUIS[]
   CIDADE              CIDADE?      @relation(fields: [CD_CIDADE], references: [CD_CIDADE], onDelete: NoAction, onUpdate: NoAction, map: "CIDADEAQUISICAO")
   CLIENTE             CLIENTE?     @relation(fields: [CD_CLIENTE], references: [CD_CLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "CLIENTEAQUISICAO")
   ESTADO              ESTADO?      @relation(fields: [CD_ESTADO], references: [CD_ESTADO], onDelete: NoAction, onUpdate: NoAction, map: "ESTADOAQUISICAO")
   OCORRENCIA          OCORRENCIA[]
   PAGAMENTO           PAGAMENTO[]
-
-  VEICULO             VEICULO?    @relation(fields: [CD_MODELO], references: [CD_VEICULO], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([CD_CORRETOR, CD_CORRETORVENDA], map: "CD_CORRETOR")
   @@index([CD_MODELO], map: "CD_MODELO")
@@ -1678,8 +1677,6 @@ model VEICULO {
   CD_VEICULO Int    @id @default(0) @db.SmallInt
   NM_MODELO  String @db.VarChar(30)
   CD_MARCA   Int?   @default(0) @db.SmallInt
-
-  AQUISICOES AQUISICAO[]
 
   @@index([CD_MARCA], map: "Index_cd_marca")
 }
