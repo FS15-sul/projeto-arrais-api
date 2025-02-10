@@ -1645,25 +1645,26 @@ model TROCAPLACA {
 }
 
 model USUARIO {
-  CD_USUARIO     Int    @id @unique(map: "CD_USUARIO") @default(0) @db.SmallInt
-  NM_USUARIO     String @db.VarChar(50)
-  NM_USU         String @db.VarChar(15)
-  NM_SENHA       String @db.VarChar(6)
-  FL_ATIVO       String @db.VarChar(1)
-  TP_NIVEL       Int?   @default(0) @db.SmallInt
-  TP_PODER       Int?   @default(0) @db.SmallInt
-  TP_FINAN       Int?   @default(0) @db.SmallInt
-  TP_COMER       Int?   @default(0) @db.SmallInt
-  TP_CANCELAR    Int?   @default(0) @db.SmallInt
-  CD_DIRETOR     Int?   @default(0) @db.SmallInt
-  TP_NF          Int?   @default(0) @db.SmallInt
-  TP_FECHACAIXA  Int?   @default(0) @db.SmallInt
-  TP_EXCLUIR     Int?   @default(0) @db.SmallInt
-  TP_WEB         Int    @default(0) @db.SmallInt
-  CD_CONTASFINAN Int?   @default(0) @db.SmallInt
-  CD_CORRETOR    Int?   @db.SmallInt
-  TP_RELVENDA    Int?   @default(1) @db.SmallInt
-  TP_COR         Int?   @default(0) @db.SmallInt
+  CD_USUARIO     Int     @id @unique(map: "CD_USUARIO") @default(0) @db.SmallInt
+  NM_USUARIO     String  @db.VarChar(50)
+  NM_USU         String  @db.VarChar(50)
+  NM_SENHA       String  @db.VarChar(6)
+  FL_ATIVO       String  @db.VarChar(1)
+  TP_NIVEL       Int?    @default(0) @db.SmallInt
+  TP_PODER       Int?    @default(0) @db.SmallInt
+  TP_FINAN       Int?    @default(0) @db.SmallInt
+  TP_COMER       Int?    @default(0) @db.SmallInt
+  TP_CANCELAR    Int?    @default(0) @db.SmallInt
+  CD_DIRETOR     Int?    @default(0) @db.SmallInt
+  TP_NF          Int?    @default(0) @db.SmallInt
+  TP_FECHACAIXA  Int?    @default(0) @db.SmallInt
+  TP_EXCLUIR     Int?    @default(0) @db.SmallInt
+  TP_WEB         Int     @default(0) @db.SmallInt
+  CD_CONTASFINAN Int?    @default(0) @db.SmallInt
+  CD_CORRETOR    Int?    @db.SmallInt
+  TP_RELVENDA    Int?    @default(1) @db.SmallInt
+  TP_COR         Int?    @default(0) @db.SmallInt
+  NM_CARGO       String? @db.VarChar(30)
 }
 
 model USUTRANSAC {
